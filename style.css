@@ -1,61 +1,173 @@
+* {
+    box-sizing: border-box;
+}
 
 body {
     margin: 0;
     font-family: Arial, sans-serif;
     background: #f7f7f7;
-  }
-  
-  .container {
+    line-height: 1.6;
+    color: #333;
+}
+
+/* 主容器 */
+.container {
     width: 90%;
     max-width: 600px;
-    margin: 50px auto;
+    margin: 20px auto;
     background: #fff;
     border-radius: 4px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     padding: 20px;
-  }
-  
-  h1 {
+}
+
+/* 标题 */
+h1 {
     text-align: center;
     margin-bottom: 20px;
-  }
-  
-  /* 题干样式 */
-  #question-title {
-    font-size: 18px;
+    font-size: 2rem;
+}
+
+/* 题干样式 */
+#question-title {
+    font-size: 1.2rem;
     margin-bottom: 10px;
     font-weight: bold;
-  }
-  
-  /* 选项容器样式 */
-  #options-container {
+}
+
+#options-container {
     margin-bottom: 20px;
-  }
-  
-  /* 选项样式 */
-  .option {
-    margin: 5px 0;
-  }
-  
-  /* 提交按钮样式 */
-  #submit-btn {
-    display: inline-block;
-    padding: 8px 16px;
+}
+
+.option {
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+}
+
+.option input {
+    margin-right: 10px;
+    transform: scale(1.2);
+}
+
+.option label {
+    font-size: 1rem;
+    /* 使用 rem 单位 */
+    cursor: pointer;
+    flex: 1;
+}
+
+/* 提交按钮样式 */
+#submit-btn {
+    display: block;
+    width: 100%;
+    padding: 12px 0;
     cursor: pointer;
     border: none;
     background-color: #007bff;
     color: #fff;
     border-radius: 4px;
-  }
-  
-  /* 答案反馈 */
-  #feedback {
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+#submit-btn:hover {
+    background-color: #0056b3;
+}
+
+/* 答案反馈 */
+#feedback {
     margin-top: 10px;
     font-weight: bold;
-  }
-  
-  #stats {
+    font-size: 1rem;
+}
+
+/* 统计信息容器 */
+#stats {
     margin-top: 20px;
-    font-size: 14px;
-  }
-  
+    font-size: 0.9rem;
+}
+
+/* 进度条样式 */
+.progress-bar {
+    width: 100%;
+    background-color: #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 5px;
+    height: 20px;
+}
+
+#progress-bar-fill {
+    height: 100%;
+    background-color: #4caf50;
+    width: 0%;
+    transition: width 0.5s;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 15px;
+        margin: 10px auto;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    #question-title {
+        font-size: 1.1rem;
+    }
+
+    .option label {
+        font-size: 0.95rem;
+    }
+
+    #submit-btn {
+        padding: 10px 0;
+        font-size: 0.95rem;
+    }
+
+    #feedback {
+        font-size: 0.95rem;
+    }
+
+    #stats {
+        font-size: 0.85rem;
+    }
+
+    .progress-bar {
+        height: 18px;
+    }
+}
+
+@media (max-width: 400px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    #question-title {
+        font-size: 1rem;
+    }
+
+    .option label {
+        font-size: 0.9rem;
+    }
+
+    #submit-btn {
+        padding: 8px 0;
+        font-size: 0.9rem;
+    }
+
+    #feedback {
+        font-size: 0.9rem;
+    }
+
+    #stats {
+        font-size: 0.8rem;
+    }
+
+    .progress-bar {
+        height: 16px;
+    }
+}

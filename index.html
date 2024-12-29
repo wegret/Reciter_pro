@@ -1,7 +1,7 @@
 <!--
  * @Author: wlaten
  * @Date: 2024-12-29 14:11:19
- * @LastEditTime: 2024-12-29 15:54:26
+ * @LastEditTime: 2024-12-29 16:13:22
  * @Discription: file content
 -->
 <!DOCTYPE html>
@@ -10,6 +10,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Reciter!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css" />
 </head>
 
@@ -31,6 +32,9 @@
             <p>答题次数：<span id="answered-count">0</span></p>
             <p>正确率：<span id="correct-rate">0%</span></p>
             <p>进度：<span id="progress-percentage">0%</span></p>
+            <div class="progress-bar">
+                <div id="progress-bar-fill" style="width: 0%;"></div>
+            </div>
             <p>当前需回顾数量：<span id="wrong-questions-count">0</span></p>
         </div>
     </div>
