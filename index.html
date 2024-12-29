@@ -1,0 +1,44 @@
+<!--
+ * @Author: wlaten
+ * @Date: 2024-12-29 14:11:19
+ * @LastEditTime: 2024-12-29 15:54:26
+ * @Discription: file content
+-->
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Reciter!</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div class="container">
+        <h1>Reciter!</h1>
+        <div id="quiz-container">
+            <!-- 题干 -->
+            <div id="question-title"></div>
+            <!-- 选项 -->
+            <div id="options-container"></div>
+            <!-- 提交按钮 -->
+            <button id="submit-btn">提交答案</button>
+            <!-- 答案反馈 -->
+            <div id="feedback"></div>
+        </div>
+        <!-- 显示进度/统计用 -->
+        <div id="stats">
+            <p>答题次数：<span id="answered-count">0</span></p>
+            <p>正确率：<span id="correct-rate">0%</span></p>
+            <p>进度：<span id="progress-percentage">0%</span></p>
+            <p>当前需回顾数量：<span id="wrong-questions-count">0</span></p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initApp } from './scripts/app.js';
+        initApp();
+    </script>
+</body>
+
+</html>

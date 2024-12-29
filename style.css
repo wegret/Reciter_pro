@@ -1,0 +1,61 @@
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f7f7f7;
+  }
+  
+  .container {
+    width: 90%;
+    max-width: 600px;
+    margin: 50px auto;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    padding: 20px;
+  }
+  
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  /* 题干样式 */
+  #question-title {
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  
+  /* 选项容器样式 */
+  #options-container {
+    margin-bottom: 20px;
+  }
+  
+  /* 选项样式 */
+  .option {
+    margin: 5px 0;
+  }
+  
+  /* 提交按钮样式 */
+  #submit-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    cursor: pointer;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 4px;
+  }
+  
+  /* 答案反馈 */
+  #feedback {
+    margin-top: 10px;
+    font-weight: bold;
+  }
+  
+  #stats {
+    margin-top: 20px;
+    font-size: 14px;
+  }
+  
