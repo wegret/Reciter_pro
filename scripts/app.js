@@ -1,7 +1,7 @@
 /*
  * @Author: wlaten
  * @Date: 2024-12-29 14:35:18
- * @LastEditTime: 2024-12-29 15:55:39
+ * @LastEditTime: 2024-12-29 16:36:23
  * @Discription: file content
  */
 
@@ -14,15 +14,19 @@ import {
     getGlobalStats,
     getLatestQuestionId,
     setLatestQuestionId
-  } from './localStorageManager.js';
+} from './localStorageManager.js';
 
-let questionManager;  
-let currentQuestion = null;  
+let questionManager;
+let currentQuestion = null;
+
+let isQuestionAnswered = false;
+let wasCorrect = false;
+
 
 export async function initApp() {
     const questions = await fetchQuestions();
     questionManager = new QuestionManager(questions);
-    renderNextQuestion();                      
+    renderNextQuestion();
 
     const submitBtn = document.getElementById('submit-btn');
     submitBtn.addEventListener('click', handleSubmitAnswer);
@@ -38,6 +42,12 @@ async function fetchQuestions() {
 }
 
 function renderNextQuestion() {
+    const submitBtn = document.getElementById('submit-btn');
+    submitBtn.textContent = '提交答案'; // "Submit Answer" in Chinese
+
+    isQuestionAnswered = false;
+    wasCorrect = false;
+
     const wrongQuestions = getWrongQuestions(questionManager.questions);
     currentQuestion = questionManager.getNextQuestion(wrongQuestions);
 
@@ -85,84 +95,91 @@ function handleSubmitAnswer() {
         return;
     }
 
-    const isMultiple = (currentQuestion.type === '多选');
+    const submitBtn = document.getElementById('submit-btn');
 
-    let userAnswers = [];
-    if (isMultiple) {
-        const selectedCheckboxes = document.querySelectorAll(
-            `input[name="question-option-${currentQuestion.id}"]:checked`
-        );
-        selectedCheckboxes.forEach(cb => {
-            userAnswers.push(cb.value.charAt(0));
-        });
-    } else {
-        const selectedRadio = document.querySelector(
-            `input[name="question-option-${currentQuestion.id}"]:checked`
-        );
-        if (!selectedRadio) {
-            alert('请先选择一个选项');
+    if (!isQuestionAnswered) {
+        const isMultiple = (currentQuestion.type === '多选');
+
+        let userAnswers = [];
+        if (isMultiple) {
+            const selectedCheckboxes = document.querySelectorAll(
+                `input[name="question-option-${currentQuestion.id}"]:checked`
+            );
+            selectedCheckboxes.forEach(cb => {
+                userAnswers.push(cb.value.charAt(0));
+            });
+        } else {
+            const selectedRadio = document.querySelector(
+                `input[name="question-option-${currentQuestion.id}"]:checked`
+            );
+            if (!selectedRadio) {
+                alert('请先选择一个选项');
+                return;
+            }
+            userAnswers.push(selectedRadio.value.charAt(0));
+        }
+
+        if (userAnswers.length === 0) {
+            alert('请先选择至少一个选项');
             return;
         }
-        userAnswers.push(selectedRadio.value.charAt(0));
-    }
 
-    if (userAnswers.length === 0) {
-        alert('请先选择至少一个选项');
-        return;
-    }
-
-    let isCorrect = false;
-    if (isMultiple) {
-        // 假设多选答案为数组，如 ["A","C"]
-        const correctAnswers = Array.isArray(currentQuestion.answer)
-            ? currentQuestion.answer
-            : currentQuestion.answer.split('');
-
-        // 判断正确性的逻辑(用户选的数量=正确答案数量) && (每个选项都在正确答案里)
-        if (userAnswers.length === correctAnswers.length) {
-            isCorrect = userAnswers.every((ua) => correctAnswers.includes(ua));
-        }
-    }
-    else {
-        // 单选，对比第一个字符
-        isCorrect = (userAnswers[0] === currentQuestion.answer);
-    }
-
-    console.log(`Handling answer for question id=${currentQuestion.id}, isCorrect=${isCorrect}`);
-
-    updateQuestionStat(currentQuestion.id, isCorrect);
-    setLatestQuestionId(currentQuestion.id);
-
-    console.log(`After setLatestQuestionId, latestQuestionId=${getLatestQuestionId()}`);
-
-    // 显示反馈
-    const feedback = document.getElementById('feedback');
-    if (isCorrect) {
-        feedback.textContent = '回答正确！';
-        feedback.style.color = 'green';
-    } else {
+        let isCorrect = false;
         if (isMultiple) {
-            let showanswer = Array.isArray(currentQuestion.answer) ? currentQuestion.answer.join('、') : currentQuestion.answer;
+            // 假设多选答案为数组，如 ["A","C"]
+            const correctAnswers = Array.isArray(currentQuestion.answer)
+                ? currentQuestion.answer
+                : currentQuestion.answer.split('');
 
-            feedback.textContent = `回答错误！正确答案是：${showanswer}`;
-        } else {
-            feedback.textContent = `回答错误！正确答案是：${currentQuestion.answer}`;
+            // 判断正确性的逻辑(用户选的数量=正确答案数量) && (每个选项都在正确答案里)
+            if (userAnswers.length === correctAnswers.length) {
+                isCorrect = userAnswers.every((ua) => correctAnswers.includes(ua));
+            }
         }
-        feedback.style.color = 'red';
-    }
+        else {
+            // 单选，对比第一个字符
+            isCorrect = (userAnswers[0] === currentQuestion.answer);
+        }
 
-    updateStatsDisplay();
+        console.log(`Handling answer for question id=${currentQuestion.id}, isCorrect=${isCorrect}`);
 
-    if (isCorrect){
-        setTimeout(() => {
-            renderNextQuestion();
-        }, 1500);
+        updateQuestionStat(currentQuestion.id, isCorrect);
+        setLatestQuestionId(currentQuestion.id);
+
+        console.log(`After setLatestQuestionId, latestQuestionId=${getLatestQuestionId()}`);
+
+        wasCorrect = isCorrect;
+        isQuestionAnswered = true;
+
+        // 显示反馈
+        const feedback = document.getElementById('feedback');
+        if (isCorrect) {
+            feedback.textContent = '回答正确！';
+            feedback.style.color = 'green';
+        } else {
+            if (isMultiple) {
+                let showanswer = Array.isArray(currentQuestion.answer) ? currentQuestion.answer.join('、') : currentQuestion.answer;
+
+                feedback.textContent = `回答错误！正确答案是：${showanswer}`;
+            } else {
+                feedback.textContent = `回答错误！正确答案是：${currentQuestion.answer}`;
+            }
+            feedback.style.color = 'red';
+        }
+
+        updateStatsDisplay();
+
+        if (isCorrect) {
+            setTimeout(() => {
+                renderNextQuestion();
+            }, 1500);
+        }
+        else {
+            submitBtn.textContent = '下一题';
+        }
     }
-    else{
-        setTimeout(() => {
-            renderNextQuestion();
-        }, 3000);
-    }
+    else
+        renderNextQuestion();
 }
 
 
