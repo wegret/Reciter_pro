@@ -1,7 +1,7 @@
 /*
  * @Author: wlaten
  * @Date: 2024-12-29 14:35:18
- * @LastEditTime: 2024-12-29 16:36:23
+ * @LastEditTime: 2024-12-29 17:00:46
  * @Discription: file content
  */
 
@@ -26,6 +26,9 @@ let wasCorrect = false;
 export async function initApp() {
     const questions = await fetchQuestions();
     questionManager = new QuestionManager(questions);
+
+    questionManager.currentIndex= getLatestQuestionId();
+
     renderNextQuestion();
 
     const submitBtn = document.getElementById('submit-btn');
